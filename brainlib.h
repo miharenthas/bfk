@@ -4,6 +4,8 @@
 #ifndef BRAINLIB__H
 #define BRAINLIB__H
 
+#include <stdio.h>
+
 struct bfd{
 	FILE *in;
 	FILE *out;
@@ -11,7 +13,7 @@ struct bfd{
 	unsigned char *m;
 	unsigned p_len;
 	unsigned m_len;
-}:
+};
 
 struct bptr{
 	char *ip;

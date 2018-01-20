@@ -10,7 +10,6 @@ void brainfuck( void *payload ){
 	struct bptr p = { data.p, data.m };
 
 	while( *p.ip != '\0' ){
-		if( data.in ) *p.ip = fgetc( data.in );
 		brainline( &p, &data );
 		++p.ip;
 	}
@@ -18,7 +17,7 @@ void brainfuck( void *payload ){
 
 //------------------------------------------------------------------------------------
 //linear part of the interpreter
-void brainline( struct bprt *p, struct bfd *data ){
+void brainline( struct bptr *p, struct bfd *data ){
 	switch( *p->ip ){
 		case '+' :
 			++*p->mp;
@@ -32,16 +31,15 @@ void brainline( struct bprt *p, struct bfd *data ){
 		case '>' :
 			++p->mp;
 			break;
-		case '.' :
-			if( in ) *p->mp = fgetc( data->in );
-			else *p->mp = getchar();
+		case ',' :
+            *p->mp = fgetc( data->in );
 			break;
 		case '.' :
-			fputc( *p->mp, data->out );
+            fputc( *p->mp, data->out );
 			break;
         case '[' :
             ++p->ip;
-            brainloop( p, &data );
+            brainloop( p, data );
             break;
 		/*
 		case '^' :
@@ -58,13 +56,12 @@ void brainline( struct bprt *p, struct bfd *data ){
 
 //------------------------------------------------------------------------------------
 //loop driver
-void brainloop( struct bprt *p, struct bfd *data ){
+void brainloop( struct bptr *p, struct bfd *data ){
 	char *ur_ip = p->ip;
 	unsigned char *loop_cnt = p->mp;
 	
 	while( *loop_cnt ){
-        if( p->ip == ']' ) p->ip = ur_ip;
-        else brainline( p );
+        if( *p->ip == ']' ) p->ip = ur_ip;
+        else brainline( p, data );
 	}
 }
-			
