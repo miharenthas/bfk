@@ -39,7 +39,7 @@ int main( int argc, char **argv ){
 	while( (iota = getopt_long( argc, argv, "p:f:m:o:", opts, &idx )) != -1 ){
 		switch( iota ){
 			case 'p' :
-				data.p_len = strlen( optarg )+64;
+				data.p_len = strlen( optarg );
 				data.p = realloc( data.p, data.p_len+1 );
 				strncpy( data.p, optarg, data.p_len );
 				break;
@@ -48,7 +48,7 @@ int main( int argc, char **argv ){
 				if( !data.in ) exit( 1 );
 				break;
 			case 'm' :
-				data.m_len = atoi( optarg )+64;
+				data.m_len = atoi( optarg );
 				data.m = calloc( data.m_len, 1 );
 				break;
 			case 'o' :

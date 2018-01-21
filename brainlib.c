@@ -20,7 +20,7 @@ void brainfuck( void *payload ){
 void brainline( struct bptr *p, struct bfd *data ){
 	switch( *p->ip ){
 		case '+' :
-			++*p->mp;
+			++*(p->mp);
 			break;
 		case '-' :
 			--*p->mp;
@@ -32,10 +32,11 @@ void brainline( struct bptr *p, struct bfd *data ){
 			++p->mp;
 			break;
 		case ',' :
-            *p->mp = fgetc( data->in );
+            do *p->mp = getc( data->in );
+            while( *p->mp == '\n' );
 			break;
 		case '.' :
-            fputc( *p->mp, data->out );
+            putc( *p->mp, data->out );
 			break;
         case '[' :
             ++p->ip;
@@ -58,10 +59,12 @@ void brainline( struct bptr *p, struct bfd *data ){
 //loop driver
 void brainloop( struct bptr *p, struct bfd *data ){
 	char *ur_ip = p->ip;
-	unsigned char *loop_cnt = p->mp;
 	
-	while( *loop_cnt ){
-        if( *p->ip == ']' ) p->ip = ur_ip;
-        else brainline( p, data );
+    if( !*p->mp )
+        while( *p->ip != ']' ) ++p->ip;
+    else while( *p->ip != ']' ){
+        brainline( p, data );
+        ++p->ip;
+        if( *p->mp && *p->ip == ']' ) p->ip = ur_ip;
 	}
 }
